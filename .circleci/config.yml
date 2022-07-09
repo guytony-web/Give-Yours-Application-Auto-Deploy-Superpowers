@@ -39,8 +39,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps: 
       - attach_workspace: 
-          at: ~/workspace       
-      - run: cat ~/workspace/output.txt
+          at: ~/       
+      - run: cat ~/project/.circleci/ansible/inventory.txt
            
 
 
