@@ -19,7 +19,7 @@ jobs:
             cd frontend
             npm install
             npm run build1                      
-            exit 1
+            #exit 1
        
       - save_cache:
           paths: [frontend/node_modules]
@@ -152,6 +152,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force 
             npm audit --audit-level=critical
+            exit 1
       - slack/notify:
           channel: C03PKJB8Q0Y
           event: fail
@@ -169,11 +170,15 @@ workflows:
       - build-backend:
           context: guytony
       - test-frontend:
+          context: guytony
           requires: [build-frontend]
       - test-backend:
+          context: guytony
           requires: [build-backend]
       - scan-backend:
+          context: guytony
           requires: [build-backend]
       - scan-frontend:
+          context: guytony
           requires: [build-frontend]
 
