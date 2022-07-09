@@ -28,7 +28,7 @@ jobs:
       #testguy: NTEMAMEU  
     steps:
             
-      - run: echo "Hello Word" > ~/.circleci/ansible/inventory.txt
+      - run: echo "Hello Word" > .circleci/ansible/inventory.txt
       - persist_to_workspace: 
           root: ~/
           paths: 
@@ -40,7 +40,7 @@ jobs:
     steps: 
       - attach_workspace: 
           at: ~/       
-      - run: cat ~/.circleci/ansible/inventory.txt
+      - run: cat .circleci/ansible/inventory.txt
            
 
 
