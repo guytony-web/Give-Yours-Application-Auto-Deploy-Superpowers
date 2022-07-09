@@ -9,8 +9,7 @@ commands:
       # Add parameter here 
       id: 
         type: string
-    steps:
-      - run: echo << parameters.id >>      
+    
     steps:
       - run:
           name: Destroy environments
