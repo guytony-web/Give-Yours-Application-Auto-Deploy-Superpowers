@@ -127,7 +127,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-frontend:
           context: guytony
     #  - build-backend
     #  - test-frontend:
