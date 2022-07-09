@@ -28,11 +28,11 @@ jobs:
       #testguy: NTEMAMEU  
     steps:
             
-      - run: echo "Hello Word" > ~/project/.circleci/ansible/inventory.txt
+      - run: echo "Hello Word" > ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
       - persist_to_workspace: 
           root: ~/
           paths: 
-            - project/.circleci/ansible/inventory.txt  
+            - cdond-c3-projectstarter/.circleci/ansible/inventory.txt  
            
   print_output_file:
     docker:
@@ -40,7 +40,7 @@ jobs:
     steps: 
       - attach_workspace: 
           at: ~/       
-      - run: cat ~/project/.circleci/ansible/inventory.txt
+      - run: cat ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
            
 
 
