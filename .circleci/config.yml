@@ -3,6 +3,7 @@ orbs:
   node: circleci/node@4.1
   slack: circleci/slack@4.1
 jobs:
+  
 
   build-frontend:
     docker:
@@ -17,8 +18,14 @@ jobs:
             # Your code here
             cd frontend
             npm install
-            npm run build                      
-            #exit 1
+            npm run build1                      
+            exit 1
+
+        
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
+
       - slack/notify:
           channel: C03PKJB8Q0Y
           event: fail
@@ -27,10 +34,7 @@ jobs:
           channel: C03PKJB8Q0Y
           event: pass
           template: success_tagged_deploy_1
-        
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+
 
   build-backend:
     docker:
@@ -124,6 +128,7 @@ workflows:
   default:
     jobs:
       - build-frontend
+          context: guytony
     #  - build-backend
     #  - test-frontend:
     #      requires: [build-frontend]
