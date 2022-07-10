@@ -288,7 +288,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
-      -checkout
+      - checkout
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -310,17 +310,41 @@ jobs:
           command: |
             # Your code here
 	          if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-            then
-              # If you are using memstash.io, generate the token "7933fe63-4687-4fa1-8426-aa25aa1730ec" on the website from your local terminal
-              #curl -H "Content-Type: text/plain" -H "token: GWWgRbTdJyn47ixgVQC3C3" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+            then              
               # If you are using kvdb.io, generate the bucket ID "9GE4jRtKznmVKRfvdBABBe" in your local terminal first
               curl https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-        - run curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_${CIRCLE_WORKFLOW_ID:0:7}
+      - run:  curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_${CIRCLE_WORKFLOW_ID:0:7}
 
             #exit 1
      # Here's where you will add some code to rollback on failure      
+      - destroy-environment:
+          id: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          id: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
 
+
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+    steps:
+      # Checkout code from git
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure      
+                   
 
 workflows:
   default:
@@ -349,3 +373,5 @@ workflows:
 
       - configure-infrastructure:
           requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
