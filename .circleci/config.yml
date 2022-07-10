@@ -341,7 +341,7 @@ jobs:
           command: |
             # your code here
             yum install -y tar gzip 
-            yum install -y python3 
+            #yum install -y python3 
             yum install -y ansible awscli            
             yum install -y nodejs
             node --version
@@ -370,7 +370,49 @@ jobs:
           id: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment:
           id: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-                   
+
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.9.1-alpine3.12
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - add_ssh_keys:
+          fingerprints: ["c0:23:e5:0e:b5:a6:9b:c3:8d:51:24:40:54:d0:85:b2"] 
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            apk update
+            apk add tar gzip 
+            apk add npm nodejs
+            apk add --update ansible aws-cli
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          id: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          id: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+
 
 workflows:
   default:
@@ -402,4 +444,6 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
           requires: [run-migrations]
