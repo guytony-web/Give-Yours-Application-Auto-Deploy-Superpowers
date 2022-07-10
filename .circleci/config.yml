@@ -29,12 +29,12 @@ jobs:
     steps:
       - checkout
       - run: pwd            
-      - run: echo "Hello Word" > ~/project/.circleci/ansible/inventory.txt
+      
       - persist_to_workspace: 
           root: ~/
           paths: 
-            - project/.circleci/ansible/inventory.txt 
-           
+            - project/.circleci/ansible/inventory1.txt 
+      - run: echo "Hello Word" > ~/project/.circleci/ansible/inventory1.txt    
   print_output_file:
     docker:
       - image: circleci/node:13.8.0
@@ -42,7 +42,7 @@ jobs:
       - checkout
       - attach_workspace: 
           at: ~/       
-      - run: cat ~/project/.circleci/ansible/inventory.txt
+      - run: cat ~/project/.circleci/ansible/inventory1.txt
            
 
 
