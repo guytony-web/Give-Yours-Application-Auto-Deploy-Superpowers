@@ -310,7 +310,7 @@ jobs:
           command: |
             # Your code here
 	          if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-            then              
+            then
               # If you are using kvdb.io, generate the bucket ID "9GE4jRtKznmVKRfvdBABBe" in your local terminal first
                 curl https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
