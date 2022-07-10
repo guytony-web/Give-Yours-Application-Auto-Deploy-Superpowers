@@ -28,12 +28,12 @@ jobs:
       #testguy: NTEMAMEU  
     steps:
       - checkout
-      - run: pwd            
-      - run: touch ~/project/.circleci/ansible/inventory.txt
+      - run: pwd           
+      
       - persist_to_workspace: 
           root: ~/project
           paths: 
-            - .circleci/ansible/inventory.txt 
+            - project/.circleci/ansible/inventory.txt 
       - run: echo "Hello Word" > ~/project/.circleci/ansible/inventory.txt    
   print_output_file:
     docker:
@@ -41,16 +41,12 @@ jobs:
     steps: 
       - checkout
       - attach_workspace: 
-          at: ~/project       
-      - run: 
-          name: test
-          command: 
-            pwd
-            ls-l ~/project/.circleci/ansible/inventory.txt
+          at: ~/       
+      
       - run:
           name: test
           command:
-            echo genneee >> ~/project/.circleci/ansible/inventory.txt
+            
             cat ~/project/.circleci/ansible/inventory.txt
            
 
@@ -293,5 +289,7 @@ workflows:
     jobs:
 
       - save_hello_world_output
-      - print_output_file
+      - print_output_file:
+          requires: [save_hello_world_output]
+
   
