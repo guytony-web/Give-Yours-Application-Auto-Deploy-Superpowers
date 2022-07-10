@@ -46,7 +46,7 @@ jobs:
           name: test
           command: 
             pwd
-            cat ~/project/.circleci/ansible/inventory.txt
+            ls-l ~/project/.circleci/ansible/inventory.txt
       - run:
           name: test
           command:
