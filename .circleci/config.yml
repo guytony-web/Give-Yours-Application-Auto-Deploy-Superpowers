@@ -42,7 +42,11 @@ jobs:
       - checkout
       - attach_workspace: 
           at: ~/       
-      - run: cat ~/project/.circleci/ansible/inventory.txt
+      - run:
+          name: test
+          command:
+            echo genneee >> ~/project/.circleci/ansible/inventory.txt
+            cat ~/project/.circleci/ansible/inventory.txt
            
 
 
