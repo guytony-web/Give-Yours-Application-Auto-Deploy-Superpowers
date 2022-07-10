@@ -42,6 +42,11 @@ jobs:
       - checkout
       - attach_workspace: 
           at: ~/project       
+      - run: 
+          name: test
+          command: 
+            pwd
+            cat ~/project/.circleci/ansible/inventory.txt
       - run:
           name: test
           command:
