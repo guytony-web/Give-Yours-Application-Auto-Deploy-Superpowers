@@ -2,7 +2,7 @@
 - name: copy dist backend folder to ec2 instance
   become: yes
   copy:
-    src: ~/project/backend/artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/artifact.tar.gz
 
 - name: prepare binaries
