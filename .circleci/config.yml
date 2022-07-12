@@ -38,7 +38,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = $(curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            SUCCESS = $(curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_<< parameters.id >>)
             #SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
@@ -301,11 +301,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update -y
+             apt-get update -y
             #apt-get install -y python3
-            sudo apt-get install -y nodejs 
-            sudo apt-get install -y npm
-            sudo apt-get install -y awscli
+             apt-get install -y nodejs 
+             apt-get install -y npm
+             apt-get install -y awscli
       - run:
           name: Run migrations
           command: |
