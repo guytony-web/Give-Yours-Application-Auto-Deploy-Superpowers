@@ -342,6 +342,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
+
       - run:
           name: Install dependencies
           command: |
@@ -362,8 +363,9 @@ jobs:
             echo "${API_URL}" > .circleci/API_URL.txt
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-            
+                         
             cat frontend/.env
+            echo "$(cat .circleci/API_URL.txt)"
       - run:
           name: Deploy frontend objects
           command: |
@@ -427,6 +429,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -440,6 +444,7 @@ jobs:
             #export API_URL="http://${BACKEND_IP}:3030"
             export API_URL=$(cat .circleci/API_URL.txt)
             echo "${API_URL}"
+            
                    
       - run:
           name: Backend smoke test.
@@ -465,10 +470,25 @@ jobs:
                 return 1
             fi
       # Here's where you will add some code to rollback on failure  
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #- destroy-environment:
+      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #- revert-migrations:
+      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+  
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+    steps:
+      # Checkout code from git
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
 
 
 
@@ -507,4 +527,4 @@ workflows:
       - deploy-frontend:
           requires: [run-migrations, deploy-backend]
       - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
+          requires: [deploy-frontend]
