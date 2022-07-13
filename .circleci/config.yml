@@ -242,12 +242,12 @@ jobs:
           command: |
             echo "[web]" > ~/project/.circleci/ansible/inventory.txt
             aws ec2 describe-instances \
-	            --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
 	            --filters "Name=tag:project,Values=udapeople" \
 	            --output text >> ~/project/.circleci/ansible/inventory.txt
             # Your code here
             #exit 1
-  - run:
+    - run:
           name: Update cloudfront distribution
           command: |
             export OldWorkflowID=$(aws cloudformation \
