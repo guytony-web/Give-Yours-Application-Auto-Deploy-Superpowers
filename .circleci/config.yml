@@ -242,9 +242,9 @@ jobs:
           command: |
             echo "[web]" > ~/project/.circleci/ansible/inventory.txt
             aws ec2 describe-instances \
-	          --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
-	          --filters "Name=tag:project,Values=udapeople" \
-	          --output text >> ~/project/.circleci/ansible/inventory.txt
+	            --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
+	            --filters "Name=tag:project,Values=udapeople" \
+	            --output text >> ~/project/.circleci/ansible/inventory.txt
             # Your code here
             #exit 1
   - run:
@@ -365,9 +365,9 @@ jobs:
             # your code here
             
             export BACKEND_IP=$(aws ec2 describe-instances \
-	          --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
-	          --filters "Name=tag:project,Values=udapeople" \
-	          --output text)
+	            --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
+	            --filters "Name=tag:project,Values=udapeople" \
+	            --output text)
             export API_URL="http://${BACKEND_IP}:3030"           
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env                         
@@ -455,9 +455,9 @@ jobs:
           command: |
             # your code here           
             export BACKEND_IP=$(aws ec2 describe-instances \
-	          --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
-	          --filters "Name=tag:project,Values=udapeople" \
-	          --output text)         
+	            --query 'Reservations[*].Instances[*].PublicIpAddress' \ 
+	            --filters "Name=tag:project,Values=udapeople" \
+	            --output text)         
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"           
             echo "API_URL = ${API_URL}"
