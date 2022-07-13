@@ -359,9 +359,11 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}" > .circleci/API_URL.txt
             echo "API_URL = ${API_URL}"
-            echo API_URL="http://${BACKEND_IP}:3030" >> ~/project/frontend/.env
-            cat ~/project/frontend/.env
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            
+            cat frontend/.env
       - run:
           name: Deploy frontend objects
           command: |
@@ -435,7 +437,8 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            export API_URL="http://${BACKEND_IP}:3030"
+            #export API_URL="http://${BACKEND_IP}:3030"
+            export API_URL=$(cat .circleci/API_URL.txt)
             echo "${API_URL}"
                    
       - run:
@@ -499,9 +502,9 @@ workflows:
       - run-migrations:
           requires: [configure-infrastructure]
 
-#      - deploy-backend:
-#          requires: [run-migrations]
-#      - deploy-frontend:
-#          requires: [run-migrations, deploy-backend]
-#      - smoke-test:
-#          requires: [deploy-backend, deploy-frontend]
+      - deploy-backend:
+          requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations, deploy-backend]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
