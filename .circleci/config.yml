@@ -480,7 +480,7 @@ jobs:
       - revert-migrations:
          id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-         
+
   cloudfront-update:
     docker:
       - image: python:3.9.1-alpine3.12
@@ -515,8 +515,8 @@ workflows:
       - build-frontend:
           context: guytony
           filters:
-           branches:
-             only: [master, dev-branch]
+          branches:
+            only: [master, dev-branch]
       - build-backend:
           context: guytony
           branches:
