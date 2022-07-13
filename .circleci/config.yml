@@ -247,7 +247,7 @@ jobs:
               --output text >> ~/project/.circleci/ansible/inventory.txt
             # Your code here
             #exit 1
-    - run:
+      - run:
           name: Update cloudfront distribution
           command: |
             export OldWorkflowID=$(aws cloudformation \
