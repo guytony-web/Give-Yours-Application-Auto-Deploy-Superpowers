@@ -514,37 +514,42 @@ workflows:
       - build-frontend:
           context: guytony
           filters:
-          branches:
-            only: [master, dev-branch]
+            branches:
+              only: [master, dev-branch]
       - build-backend:
           context: guytony
-          branches:
-             only: [master, dev-branch]
+          filters:
+            branches:
+              only: [master, dev-branch]
       - test-frontend:
           context: guytony
           requires: [build-frontend]
-          branches:
-             only: [master, dev-branch]
+          filters:
+            branches:
+              only: [master, dev-branch]
       - test-backend:
           context: guytony
           requires: [build-backend]
-          branches:
-             only: [master, dev-branch]
+          filters:
+            branches:
+              only: [master, dev-branch]
       - scan-backend:
           context: guytony
           requires: [build-backend]
-          branches:
-             only: [master, dev-branch]
+          filters:
+            branches:
+              only: [master, dev-branch]
       - scan-frontend:
           context: guytony
           requires: [build-frontend]
-          branches:
-             only: [master, dev-branch]
+          filters:
+            branches:
+              only: [master, dev-branch]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
            branches:
-             only: [master]
+              only: [master]
 
       - configure-infrastructure:
           requires: [deploy-infrastructure]
