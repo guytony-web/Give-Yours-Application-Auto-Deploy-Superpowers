@@ -38,7 +38,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = $(curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_<< parameters.id >>)
+            SUCCESS=$(curl --insecure https://kvdb.io/GWWgRbTdJyn47ixgVQC3C3/migration_<< parameters.id >>)
             #SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
@@ -434,6 +434,7 @@ jobs:
     docker:
       # Lightweight Docker image 
       - image: python:3.9.1-alpine3.12
+      #- image: python:3.9-bullseye
     steps:
       # Checkout code from git
       - checkout
@@ -445,11 +446,6 @@ jobs:
             apk update
             apk add curl nodejs npm 
             apk add --update aws-cli
-    #  - run:
-    #      name: Get backend url
-    #      command: |
-            # your code here
-     
       - run:
           name: Backend smoke test.
           command: |
@@ -461,17 +457,15 @@ jobs:
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030"           
             echo "API_URL = ${API_URL}"
-            # your code here
             if curl "${API_URL}/api/status" | grep "ok"
             then
                 return 0
             else
                 return 1
-            fi 
+            fi
       - run:
           name: Frontend smoke test.
           command: |
-            # your code here
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
@@ -481,66 +475,77 @@ jobs:
             else
                 return 1
             fi
-      # Here's where you will add some code to rollback on failure  
-      #- destroy-environment:
-      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
-      #- revert-migrations:
-      #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+         id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+         id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+         
   cloudfront-update:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
-          name: Install dependencies
-          command: |
-            yum install -y curl
+          name: install dependencies
+          command:
+            apk update
+            apk add npm nodejs
+            apk add --update aws-cli
       - run:
           name: Update cloudfront distribution
           command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
 
-            export OldWorkflowID=${cat ~/project/.circleci/ansible/OldWorkflowID.txt}
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-            --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-            # promote
-            echo "${OldWorkflowID}"
-            echo "${STACKS[@]}"
-            aws cloudformation update-stack \
-              --use-previous-template \
-              --stack-name cloudfront-${OldWorkflowID} \
-              --parameters-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --tags project=udapeople
       # Here's where you will add some code to rollback on failure
       #- destroy-environment:
       #    workflow_id: "${CIRCLE_WORKFLOW_ID}"
       #- revert-migrations:
       #    id: ${CIRCLE_WORKFLOW_ID:0:7}
+
+
+
 workflows:
   default:
     jobs:
       - build-frontend:
           context: guytony
+          filters:
+           branches:
+             only: [master, dev-branch]
       - build-backend:
           context: guytony
+          branches:
+             only: [master, dev-branch]
       - test-frontend:
           context: guytony
           requires: [build-frontend]
+          branches:
+             only: [master, dev-branch]
       - test-backend:
           context: guytony
           requires: [build-backend]
+          branches:
+             only: [master, dev-branch]
       - scan-backend:
           context: guytony
           requires: [build-backend]
+          branches:
+             only: [master, dev-branch]
       - scan-frontend:
           context: guytony
           requires: [build-frontend]
+          branches:
+             only: [master, dev-branch]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          #filters:
-          #  branches:
-          #    only: [test-feature-branch]
+          filters:
+           branches:
+             only: [master]
 
       - configure-infrastructure:
           requires: [deploy-infrastructure]
