@@ -483,18 +483,19 @@ jobs:
 
   cloudfront-update:
     docker:
-      - image: python:3.9.1-alpine3.12
+      # - image: python:3.9.1-alpine3.12
+      - image: python:3.9-bullseye
     steps:
       - checkout
       - run:
           name: install dependencies
           command:
             #yum  update
-            apk update
-            apk add nodejs npm 
-            apk add --update ansible aws-cli
+            apt-get update -y
+            apt-get install -y nodejs npm 
+            apt-get install -y  aws-cli
       - run:
-          name: Update cloudfront distribution
+          name: Copy Old Workflow
           command: |
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
