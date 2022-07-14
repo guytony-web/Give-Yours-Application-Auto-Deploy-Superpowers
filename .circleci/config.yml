@@ -489,7 +489,7 @@ jobs:
       - checkout
       - run:
           name: install dependencies
-          command:
+          command: |
             #yum  update
             apt-get update
             #apt-get install -y python3
