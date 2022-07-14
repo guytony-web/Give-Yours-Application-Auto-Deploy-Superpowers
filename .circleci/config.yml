@@ -445,7 +445,7 @@ jobs:
           command: |
             apk update
             apk add curl nodejs npm 
-            apk add --update aws-cli
+            apk add --update ansible aws-cli
       - run:
           name: Backend smoke test.
           command: |
@@ -492,7 +492,7 @@ jobs:
             #yum  update
             apk update
             apk add nodejs npm 
-            apk add --update aws-cli
+            apk add --update ansible aws-cli
       - run:
           name: Update cloudfront distribution
           command: |
