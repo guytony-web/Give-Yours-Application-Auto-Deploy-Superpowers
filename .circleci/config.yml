@@ -491,9 +491,11 @@ jobs:
           name: install dependencies
           command:
             #yum  update
-            apt-get update -y
-            apt-get install -y nodejs npm 
-            apt-get install -y  aws-cli
+            apt-get update
+            #apt-get install -y python3
+            apt-get install -y nodejs 
+            apt-get install -y npm
+            apt-get install -y awscli
       - run:
           name: Copy Old Workflow
           command: |
