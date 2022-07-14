@@ -518,7 +518,7 @@ jobs:
       - run: yum -y install tar gzip
       - attach_workspace:
           at: ~/
-       - run:
+      - run:
           name: Remove old stacks and files
           command: |
             export OldWorkflowID $(cat ~/project/.circleci/ansible/OldWorkflowID.txt)
