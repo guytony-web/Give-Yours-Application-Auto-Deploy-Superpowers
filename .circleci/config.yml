@@ -286,6 +286,7 @@ jobs:
             apk add tar gzip 
             apk add --update ansible aws-cli
             #exit 1
+            
       - run:
           name: Configure server
           command: |
