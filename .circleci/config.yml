@@ -523,7 +523,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID $(cat ~/project/.circleci/ansible/OldWorkflowID.txt)
+            export OldWorkflowID=$(cat ~/project/.circleci/ansible/OldWorkflowID.txt)
             echo ${OldWorkflowID}
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             # Fetch the stack names          
