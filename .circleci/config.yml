@@ -248,7 +248,7 @@ jobs:
             # Your code here
             #exit 1
       - run:
-          name: Update cloudfront distribution
+          name: Copy Old Workflow 
           command: |
             export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
@@ -497,7 +497,7 @@ jobs:
             apt-get install -y npm
             apt-get install -y awscli
       - run:
-          name: Copy Old Workflow
+          name: Update cloudfront distribution
           command: |
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
@@ -515,9 +515,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum -y install tar gzip
       - attach_workspace:
           at: ~/
-      - run:
+       - run:
           name: Remove old stacks and files
           command: |
             export OldWorkflowID $(cat ~/project/.circleci/ansible/OldWorkflowID.txt)
