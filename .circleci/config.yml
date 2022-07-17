@@ -49,7 +49,6 @@ commands:
             #  exit 1
             fi
       
-
 jobs:
   
   build-frontend:
@@ -80,7 +79,6 @@ jobs:
           channel: C03PKJB8Q0Y
           event: pass
           template: success_tagged_deploy_1
-
 
   build-backend:
     docker:
@@ -159,7 +157,6 @@ jobs:
           event: pass
           template: success_tagged_deploy_1            
                           
-
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -183,6 +180,7 @@ jobs:
           channel: C03PKJB8Q0Y
           event: pass
           template: success_tagged_deploy_1            
+
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -208,17 +206,6 @@ jobs:
           channel: C03PKJB8Q0Y
           event: pass
           template: success_tagged_deploy_1            
-#*******************
-  save_hello_world_output:
-    docker:
-      - image: circleci/node:13.8.0
-    #environment:
-      #testguy: NTEMAMEU  
-    steps:      
-      - run: echo "Hello Word" 
-   
-
-#******************
 
   deploy-infrastructure:
     docker:
@@ -273,7 +260,6 @@ jobs:
        #Here's where you will add some code to rollback on failure 
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
-# 
   
   configure-infrastructure:
     docker:
@@ -351,7 +337,6 @@ jobs:
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
@@ -399,6 +384,7 @@ jobs:
          id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
+
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
@@ -492,7 +478,6 @@ jobs:
       - revert-migrations:
          id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-
   cloudfront-update:
     docker:
       # - image: python:3.9.1-alpine3.12
@@ -522,6 +507,7 @@ jobs:
           id: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
+ 
   cleanup:
     docker:
       - image: amazon/aws-cli
@@ -548,48 +534,42 @@ jobs:
               
             fi
 
-
-
 workflows:
-  default:
-    jobs:
-      - build-frontend:
-          context: guytony
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - build-backend:
-          context: guytony
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - test-frontend:
-          context: guytony
-          requires: [build-frontend]
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - test-backend:
-          context: guytony
-          requires: [build-backend]
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - scan-backend:
-          context: guytony
-          requires: [build-backend]
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - scan-frontend:
-          context: guytony
-          requires: [build-frontend]
-          # filters:
-          #   branches:
-          #     only: [master, dev-branch]
-      - save_hello_world_output:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
-     
+    default:
+      jobs:
+        - build-frontend:
+            context: guytony
+        - build-backend:
+            context: guytony
+        - test-frontend:
+            context: guytony
+            requires: [build-frontend]
+        - test-backend:
+            context: guytony
+            requires: [build-backend]
+        - scan-backend:
+            context: guytony
+            requires: [build-backend]
+        - scan-frontend:
+            context: guytony
+            requires: [build-frontend]
+        - deploy-infrastructure:
+            requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+            filters:
+             branches:
+                only: [master]  
+        - configure-infrastructure:
+            requires: [deploy-infrastructure]
+        - run-migrations:
+            requires: [configure-infrastructure]
+  
+        - deploy-backend:
+            requires: [run-migrations]
+        - deploy-frontend:
+            requires: [run-migrations, deploy-backend]
+        - smoke-test:
+            requires: [deploy-frontend]
+        - cloudfront-update:
+            requires: [smoke-test]
+        - cleanup:
+            requires: [cloudfront-update]
