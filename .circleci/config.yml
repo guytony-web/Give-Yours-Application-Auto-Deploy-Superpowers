@@ -208,6 +208,17 @@ jobs:
           channel: C03PKJB8Q0Y
           event: pass
           template: success_tagged_deploy_1            
+#*******************
+  save_hello_world_output:
+    docker:
+      - image: circleci/node:13.8.0
+    #environment:
+      #testguy: NTEMAMEU  
+    steps:      
+      - run: echo "Hello Word" 
+   
+
+#******************
 
   deploy-infrastructure:
     docker:
@@ -544,57 +555,41 @@ workflows:
     jobs:
       - build-frontend:
           context: guytony
-          filters:
-            branches:
-              only: [master, dev-branch]
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
       - build-backend:
           context: guytony
-          filters:
-            branches:
-              only: [master, dev-branch]
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
       - test-frontend:
           context: guytony
           requires: [build-frontend]
-          filters:
-            branches:
-              only: [master, dev-branch]
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
       - test-backend:
           context: guytony
           requires: [build-backend]
-          filters:
-            branches:
-              only: [master, dev-branch]
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
       - scan-backend:
           context: guytony
           requires: [build-backend]
-          filters:
-            branches:
-              only: [master, dev-branch]
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
       - scan-frontend:
           context: guytony
           requires: [build-frontend]
-          filters:
-            branches:
-              only: [master, dev-branch]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-           branches:
-              only: [master]
-
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-
-      - deploy-backend:
-          requires: [run-migrations]
-      - deploy-frontend:
-          requires: [run-migrations, deploy-backend]
-      - smoke-test:
-          requires: [deploy-frontend]
-      - cloudfront-update:
-          requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
-      
+          # filters:
+          #   branches:
+          #     only: [master, dev-branch]
+        - save_hello_world_output:
+            requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+            filters:
+             branches:
+                only: [master]
+     
