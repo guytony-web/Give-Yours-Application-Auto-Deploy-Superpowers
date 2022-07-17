@@ -590,6 +590,6 @@ workflows:
         - save_hello_world_output:
             requires: [test-frontend, test-backend, scan-frontend, scan-backend]
             filters:
-             branches:
+            branches:
                 only: [master]
      
