@@ -587,9 +587,9 @@ workflows:
           # filters:
           #   branches:
           #     only: [master, dev-branch]
-        - save_hello_world_output:
-            requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-            filters:
+      - save_hello_world_output:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
             branches:
-                only: [master]
+              only: [master]
      
