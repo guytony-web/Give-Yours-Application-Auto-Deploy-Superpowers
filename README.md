@@ -1,11 +1,6 @@
-We are archiving this repository because we do not want learners to push personal development to the current repository. If you have any issues or suggestions to make, feel free to:
-- Utilize the https://knowledge.udacity.com/ forum to seek help on content-specific issues.
-- [Submit a support ticket](https://udacity.zendesk.com/hc/en-us/requests/new) along with the link to your forked repository. 
-- If you are an enterprise learner, please [Submit a support ticket here](https://udacityenterprise.zendesk.com/hc/en-us/requests/new?ticket_form_id=360000279131)
-
 ## Give your Application Auto-Deploy Superpowers
 
-In this project, you will prove your mastery of the following learning objectives:
+### Project objectives:
 
 - Explain the fundamentals and benefits of CI/CD to achieve, build, and deploy automation for cloud-based software products.
 - Utilize Deployment Strategies to design and build CI/CD pipelines that support Continuous Delivery processes.
@@ -13,6 +8,22 @@ In this project, you will prove your mastery of the following learning objective
 - Surface critical server errors for diagnosis using centralized structured logging.
 
 ![Diagram of CI/CD Pipeline we will be building.](udapeople.png)
+
+A CI-CD pipeline for a client/server TypeScript project hosted on AWS EC2 and CloudFront and monitored with Prometheus,
+with Slack and E-mail notifications used for alerts.
+### CI/CD Pipeline Diagram
+
+![udapeople-pipeline-1](https://user-images.githubusercontent.com/108080899/184547265-87500b22-3bbb-4c93-b40a-c30264f9c828.png)
+
+### Prerequisites
+
+* [Nodejs](https://nodejs.org/en/)
+* [Python](https://www.python.org/) 
+* [GitHub account](https://github.com/)
+* [CircleCi account](https://circleci.com/)
+* [AWS account](https://aws.amazon.com/)
+* [kvdb api bucket](https://kvdb.io/)
+* [Slack api App](https://api.slack.com/)
 
 ### Instructions
 
@@ -24,15 +35,8 @@ In this project, you will prove your mastery of the following learning objective
 
 ### Project Submission
 
-For your submission, please submit the following:
+- These screenshots is included in the code repository in the root folder. 
 
-- A text file named `urls.txt` including:
-  1. Public Url to GitHub repository (not private) [URL01]
-  1. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
-  1. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
-  1. Public URLs to deployed application back-end in EC2 [URL04]
-  1. Public URL to your Prometheus Server [URL05]
-- Your screenshots in JPG or PNG format, named using the screenshot number listed in the instructions. These screenshots should be included in your code repository in the root folder.
   1. Job failed because of compile errors. [SCREENSHOT01]
   1. Job failed because of unit tests. [SCREENSHOT02]
   1. Job that failed because of vulnerable packages. [SCREENSHOT03]
@@ -43,7 +47,7 @@ For your submission, please submit the following:
   1. Successful promotion job. [SCREENSHOT08]
   1. Successful cleanup job. [SCREENSHOT09]
   1. Only deploy on pushed to `master` branch. [SCREENSHOT10]
-  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11]
+  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11_CPU], [SCREENSHOT11_Disk], [SCREENSHOT11_Memory]
   1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12]
 
 - Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
