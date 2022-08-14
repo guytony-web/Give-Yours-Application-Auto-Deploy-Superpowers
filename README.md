@@ -52,7 +52,6 @@ with Slack and E-mail notifications used for alerts.
 
 - Presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
 
-Before you submit your project, please check your work against the project rubric. If you haven’t satisfied each criterion in the rubric, then revise your work so that you have met all the requirements. 
 
 ### Built With
 
